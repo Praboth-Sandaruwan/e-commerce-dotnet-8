@@ -1,0 +1,51 @@
+User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+publish/
+
+
+IDE settings and temporary files
+.vs/
+.vscode/
+*.csproj.user
+*.dotsettings.user
+
+Rider temporary files
+.idea/
+
+Tooling
+.store/
+
+Log and temp files
+*.log
+*.tmp
+*.bak
+
+Cache files
+*.cache
+
+Test results
+TestResults/
+*.trx
+*.nupkg
+
+Secrets (if not using User Secrets)
+appsettings.Development.json
+secrets.json
+
+Environment variables
+.env
