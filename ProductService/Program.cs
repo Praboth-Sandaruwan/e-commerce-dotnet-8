@@ -86,7 +86,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/health", () => Results.Ok(new { status = "Healthy" }))
    .WithName("HealthCheck")
-   .WithTags("Health");
+   .WithTags("Testing");
 
 
 app.MapGet("/api/products", () => Results.Ok(new List<object>
@@ -95,8 +95,8 @@ app.MapGet("/api/products", () => Results.Ok(new List<object>
         new { Id = 2, Name = "Mouse" }
     }))
     .RequireAuthorization() // This endpoint now requires a valid token (for testing)
-    .WithName("GetProducts")
-    .WithTags("Products");
+    .WithName("GetProductsTest")
+    .WithTags("Testing");
 
 app.Run();
 
