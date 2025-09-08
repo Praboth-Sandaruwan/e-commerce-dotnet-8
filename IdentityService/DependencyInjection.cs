@@ -16,6 +16,7 @@ public static class DependencyInjection
     {
         services.AddIdentityServer(options =>
         {
+            options.LicenseKey = null; // Set to null for development purposes
             options.KeyManagement.Enabled = false; // Disable key management for simplicity in development
         })
             .AddInMemoryApiScopes(IdentityServerConfig.GetApiScopes())

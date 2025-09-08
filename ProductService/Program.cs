@@ -30,7 +30,7 @@ app.UseAuthorization();
 app.MapProductApiEndpoints();
 
 // --- Database Seeding --------------------------------------------------------
-DbSeeder.SeedDatabase(app);
+//DbSeeder.SeedDatabase(app);
 
 app.Run();
 
