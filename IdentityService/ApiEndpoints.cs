@@ -40,6 +40,7 @@ public static class ApiEndpoints
 
             if (result.Succeeded)
             {
+                await userManager.AddToRoleAsync(user, "User"); // Assign the "User" role by default
                 return Results.Created($"/api/account/{user.Id}", new { Message = "User registered successfully." });
             }
 
@@ -76,7 +77,8 @@ public static class ApiEndpoints
                 var claims = new List<Claim>
             {
                 new(JwtClaimTypes.Subject, user.Id),
-                new(JwtClaimTypes.Name, user.UserName ?? string.Empty)
+                new(JwtClaimTypes.Name, user.UserName ?? string.Empty),
+                new(JwtClaimTypes.Role, userManager.GetRolesAsync(user).Result.FirstOrDefault() ?? "User")
             };
                 var token = await identityServerTools.IssueJwtAsync(3600, claims); // 1 hour lifetime
 
