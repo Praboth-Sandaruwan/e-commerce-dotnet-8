@@ -20,8 +20,8 @@ public static class ApiEndpoints
 
         /* Register a new user */
         accountGroup.MapPost("/register", async (
-            [FromBody] RegisterRequestDto model,
-            [FromServices] UserManager<ApplicationUser> userManager
+            [FromServices] UserManager<ApplicationUser> userManager,
+            [FromBody] RegisterRequestDto model
         ) =>
         {
             if (model == null || !model.Password.Equals(model.ConfirmPassword))
@@ -55,12 +55,12 @@ public static class ApiEndpoints
 
         /* Login an existing user */
         accountGroup.MapPost("/login", async (
-            [FromBody] LoginRequestDto model,
             [FromServices] SignInManager<ApplicationUser> signInManager,
             [FromServices] UserManager<ApplicationUser> userManager,
+            [FromServices] IIdentityServerTools identityServerTools,
+            [FromBody] LoginRequestDto model,
             HttpContext httpContext,
-            ApplicationDbContext dbContext,
-            [FromServices] IIdentityServerTools identityServerTools) =>
+            ApplicationDbContext dbContext) =>
         {
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user == null)
