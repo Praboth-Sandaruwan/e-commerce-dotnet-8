@@ -81,6 +81,9 @@ namespace OrderService.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("numeric");
+
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("numeric");
 

@@ -95,7 +95,7 @@ public static class DependencyInjection
         app.UseAuthentication();
         app.UseAuthorization();
 
-       // DbSeeder.SeedDatabase(app);
+        DbSeeder.SeedDatabase(app);
 
         return app;
      }
