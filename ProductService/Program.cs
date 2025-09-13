@@ -9,10 +9,6 @@ builder.Services.AddProductServiceDependencies(builder.Configuration, builder.En
 
 var app = builder.Build();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

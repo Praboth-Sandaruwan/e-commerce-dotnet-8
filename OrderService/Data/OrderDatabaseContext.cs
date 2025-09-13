@@ -10,7 +10,19 @@ public class OrderDataBaseContext : DbContext
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
 
+    public override int SaveChanges()
+    {
+        ApplyTimestamps();
+        return base.SaveChanges();
+    }
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        ApplyTimestamps();
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void ApplyTimestamps()
     {
         var entries = ChangeTracker
             .Entries()
@@ -28,7 +40,6 @@ public class OrderDataBaseContext : DbContext
                 entity.CreatedAt = DateTime.UtcNow;
             }
         }
-
-        return await base.SaveChangesAsync(cancellationToken);
     }
 }
+

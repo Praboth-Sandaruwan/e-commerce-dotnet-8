@@ -19,6 +19,10 @@ public class OrderItem : BaseEntity
     [Required]
     [Range(0.01, double.MaxValue)]
     public decimal UnitPrice { get; set; }
+
+    [Required]
+    [Range(0.01, double.MaxValue)]
+    public decimal Subtotal { get; set; }
     
     // Foreign key to the Order
     public Guid OrderId { get; set; }

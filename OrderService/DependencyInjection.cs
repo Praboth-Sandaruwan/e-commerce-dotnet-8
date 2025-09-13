@@ -1,6 +1,8 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using OrderService.Data;
 
 namespace OrderService;
 
@@ -73,7 +75,28 @@ public static class DependencyInjection
 
         // 4. Database connection
         var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<OrderDataBaseContext>(options =>
+            options.UseNpgsql(connectionString));
 
         return services;
     }
+
+    public static IApplicationBuilder UseOrderServices(this IApplicationBuilder app)
+    {
+        app.UseRouting();
+
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrderService API V1");
+            c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+        });
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+       // DbSeeder.SeedDatabase(app);
+
+        return app;
+     }
 }
