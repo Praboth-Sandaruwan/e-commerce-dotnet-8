@@ -25,7 +25,7 @@ public static class DependencyInjection
                 BearerFormat = "JWT",
                 Scheme = "Bearer"
             });
-            
+
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
@@ -64,8 +64,9 @@ public static class DependencyInjection
         {
             options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
             options.AddPolicy("ProductManager", policy => policy.RequireRole("ProductManager"));
-            options.AddPolicy("AdminOrProductManager", policy => policy.RequireRole("Admin", "ProductManager"));
             options.AddPolicy("User", policy => policy.RequireRole("User"));
+            options.AddPolicy("AdminOrProductManager", policy => policy.RequireRole("Admin", "ProductManager"));
+            options.AddPolicy("AdminOrProductManagerOrUser", policy => policy.RequireRole("Admin", "ProductManager", "User"));
         });
 
         // 3. Add Database Context

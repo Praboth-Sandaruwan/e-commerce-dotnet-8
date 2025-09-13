@@ -68,8 +68,9 @@ public static class DependencyInjection
         {
             options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
             options.AddPolicy("OrderManager", policy => policy.RequireRole("OrderManager"));
-            options.AddPolicy("AdminOrOrderManager", policy => policy.RequireRole("Admin", "OrderManager"));
             options.AddPolicy("User", policy => policy.RequireRole("User"));
+            options.AddPolicy("AdminOrOrderManager", policy => policy.RequireRole("Admin", "OrderManager"));
+            options.AddPolicy("AdminOrOrderManagerOrUser", policy => policy.RequireRole("Admin", "OrderManager", "User"));
         });
 
 
