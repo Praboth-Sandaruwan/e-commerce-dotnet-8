@@ -1,45 +1,45 @@
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using ProductService.Data;
 
-namespace ProductService;
+namespace OrderService;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddProductServiceDependencies(
-        this IServiceCollection services, 
-        IConfiguration configuration, 
-        IWebHostEnvironment environment)
+    public static IServiceCollection AddOrderServices(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        IHostEnvironment environment
+        )
     {
-        // 1. Add API Documentation (Swagger)
+
+        // 1. Add Swagger
         services.AddEndpointsApiExplorer();
+
         services.AddSwaggerGen(options =>
         {
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "OrderService API", Version = "v1" });
+
+            var securityScheme = new OpenApiSecurityScheme
             {
-                In = ParameterLocation.Header,
-                Description = "Please enter a valid token",
                 Name = "Authorization",
                 Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
                 BearerFormat = "JWT",
-                Scheme = "Bearer"
-            });
-            
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                In = ParameterLocation.Header,
+                Description = "JWT Authorization header using the Bearer scheme."
+            };
+
+            options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+
+            var securityRequirement = new OpenApiSecurityRequirement
             {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    new string[]{}
-                }
-            });
+                { securityScheme, new[] { JwtBearerDefaults.AuthenticationScheme } }
+            };
+
+            options.AddSecurityRequirement(securityRequirement);
+
         });
 
         // 2. Add Authentication and Authorization
@@ -47,7 +47,7 @@ public static class DependencyInjection
             .AddJwtBearer(options =>
             {
                 options.Authority = "https://localhost:7000";
-                options.RequireHttpsMetadata = true;
+                options.RequireHttpsMetadata = environment.IsProduction();
                 options.TokenValidationParameters.ValidIssuer = "https://localhost:7000";
                 options.TokenValidationParameters.ValidateAudience = false;
 
@@ -59,19 +59,20 @@ public static class DependencyInjection
                     };
                 }
             });
-            
+
+
+        // 3. Add Authorization policies
         services.AddAuthorization(options =>
         {
             options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-            options.AddPolicy("ProductManager", policy => policy.RequireRole("ProductManager"));
-            options.AddPolicy("AdminOrProductManager", policy => policy.RequireRole("Admin", "ProductManager"));
+            options.AddPolicy("OrderManager", policy => policy.RequireRole("OrderManager"));
+            options.AddPolicy("AdminOrOrderManager", policy => policy.RequireRole("Admin", "OrderManager"));
             options.AddPolicy("User", policy => policy.RequireRole("User"));
         });
 
-        // 3. Add Database Context
+
+        // 4. Database connection
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<ProductDatabaseContext>(options =>
-            options.UseNpgsql(connectionString));
 
         return services;
     }
