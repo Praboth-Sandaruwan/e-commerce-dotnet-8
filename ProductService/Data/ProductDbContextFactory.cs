@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using ProductService.Data;
 using System.IO;
-using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this using directive
+using Npgsql.EntityFrameworkCore.PostgreSQL; 
 
 public class ProductDbContextFactory : IDesignTimeDbContextFactory<ProductDatabaseContext>
 {

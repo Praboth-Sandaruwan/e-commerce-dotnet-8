@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using IdentityService.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -5,6 +6,8 @@ namespace IdentityService.Data;
 
 public static class DbSeeder
 {
+    [DataType(DataType.Password)]
+    static string DefaultPassword = "Password123!";
     public static async Task SeedDatabaseAsync(
         IApplicationBuilder app
         )
@@ -78,7 +81,7 @@ public static class DbSeeder
     {
         try
         {
-            string[] userRoles = { "Admin", "User" };
+            string[] userRoles = { "Admin", "User", "ProductManager" };
 
             foreach (string userRole in userRoles)
             {
@@ -100,13 +103,22 @@ public static class DbSeeder
 
                     };
 
-                    string defaultPassword = "Password123!";
+                    //string defaultPassword = "Password123!";
 
-                    await userManager.CreateAsync(newUser, defaultPassword);
+                    var result = await userManager.CreateAsync(newUser, DefaultPassword);
+                    if (result.Succeeded)
+                    {
+                        await AssignRoleAsync(userManager, newUser, userRole, logger);
+                        logger.LogWarning("User with email {UserEmail} created. And assigned the {UserRole} role", userEmail, userRole);
+                    }
+                    else
+                    {
+                        logger.LogError("Failed to create user {UserEmail}: {Errors}", userEmail, string.Join(", ", result.Errors.Select(e => e.Description)));
 
-                    await AssignRoleAsync(userManager, newUser, userRole, logger);
+                        await AssignRoleAsync(userManager, newUser, userRole, logger);
 
-                    logger.LogWarning("User with email {UserEmail} created. And assigned the {UserRole} role", userEmail, userRole);
+                        logger.LogWarning("User with email {UserEmail} created. And assigned the {UserRole} role", userEmail, userRole);
+                    }
                 }
             }
         }

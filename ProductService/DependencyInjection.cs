@@ -59,7 +59,13 @@ public static class DependencyInjection
                 }
             });
             
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+            options.AddPolicy("ProductManager", policy => policy.RequireRole("ProductManager"));
+            options.AddPolicy("AdminOrProductManager", policy => policy.RequireRole("Admin", "ProductManager"));
+            options.AddPolicy("User", policy => policy.RequireRole("User"));
+        });
 
         // 3. Add Database Context
         var connectionString = configuration.GetConnectionString("DefaultConnection");

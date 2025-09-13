@@ -99,7 +99,7 @@ public static class ApiEndpoints
         })
         .WithName("CreateProduct")
         .WithTags("Products")
-        .RequireAuthorization();
+        .RequireAuthorization("AdminOrProductManager");
 
         // request params : id, product in body   response: 201 : updated product, 400, 401, 403, 404
         // protected endpoint
@@ -141,7 +141,7 @@ public static class ApiEndpoints
         })
         .WithName("UpdateProduct")
         .WithTags("Products")
-        .RequireAuthorization();
+        .RequireAuthorization("AdminOrProductManager");
 
         // request params : id   response: 204 : no content, 400, 401, 403, 404
         // protected endpoint
@@ -177,7 +177,7 @@ public static class ApiEndpoints
         })
         .WithName("DeleteProduct")
         .WithTags("Products")
-        .RequireAuthorization();
+        .RequireAuthorization("AdminOrProductManager");
 
         // request params : id, quantity   response: 200 : updated product stock, 400, 401, 403, 404
         // protected endpoint
@@ -250,6 +250,6 @@ public static class ApiEndpoints
         })
         .WithName("UpdateProductStock")
         .WithTags("Products")
-        .RequireAuthorization();
+        .RequireAuthorization("AdminOrProductManager");
     }
 }
